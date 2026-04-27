@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -200,14 +200,32 @@ function Icon({ name }) {
 }
 
 function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <header className="site-header">
+    <header className={`site-header ${isMenuOpen ? 'menu-open' : ''}`}>
       <a href="#home" className="brand" aria-label="Shahin">
         <img src="/LOGO.svg" alt="Shahin" />
       </a>
-      <nav aria-label="التنقل الرئيسي">
+      <button
+        type="button"
+        className="menu-toggle"
+        aria-label={isMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
+        aria-expanded={isMenuOpen}
+        aria-controls="main-nav"
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+      >
+        ☰
+      </button>
+      <nav id="main-nav" aria-label="التنقل الرئيسي">
         {navItems.map((item) => (
-          <a href={item.href} title={item.label} aria-label={item.label} key={item.href}>
+          <a
+            href={item.href}
+            title={item.label}
+            aria-label={item.label}
+            key={item.href}
+            onClick={() => setIsMenuOpen(false)}
+          >
             {item.label}
           </a>
         ))}
@@ -226,12 +244,8 @@ function Hero() {
       <div className="hero-fallback" aria-hidden="true" />
       <div className="hero-vignette" />
       <div className="hero-copy">
-        <h1>
-          نصنع المستقبل
-          <br />
-          الرقمي
-        </h1>
-        <p>حلول متكاملة في التقنية ودمج الذكاء الاصطناعي والتجارة والتسويق الرقمي.</p>
+        <h1>نصنع المستقبل الرقمي</h1>
+        <p>حلول متكاملة في التقنية ودمج الذكاء الاصطناعي في التجارة والتسويق الرقمي.</p>
         <div className="hero-actions">
           <a className="primary-button" href="#contact">
             ابدأ الآن
