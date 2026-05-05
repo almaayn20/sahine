@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -10,18 +10,18 @@ const contact = {
 };
 
 const policyLinks = [
-  { label: 'سياسة حماية بيانات المستخدم', href: '/#contact' },
-  { label: 'سياسة استخدام الخدمات', href: '/#contact' },
-  { label: 'سياسة الاستبدال والاسترجاع', href: '/#contact' },
-  { label: 'سياسة الشحن والتوصيل', href: '/shipping-policy' },
+  { label: 'سياسة حماية بيانات المستخدم', href: '#contact' },
+  { label: 'سياسة استخدام الخدمات', href: '#contact' },
+  { label: 'سياسة الاستبدال والاسترجاع', href: '#contact' },
+  { label: 'سياسة الشحن والتوصيل', href: '#/shipping-policy' },
 ];
 
 const navItems = [
-  { href: '/#home', label: 'الرئيسية' },
-  { href: '/#about', label: 'من نحن' },
-  { href: '/#packages', label: 'الباقات' },
-  { href: '/#services', label: 'الخدمات' },
-  { href: '/#contact', label: 'التواصل' },
+  { href: '#home', label: 'الرئيسية' },
+  { href: '#about', label: 'من نحن' },
+  { href: '#packages', label: 'الباقات' },
+  { href: '#services', label: 'الخدمات' },
+  { href: '#contact', label: 'التواصل' },
 ];
 
 const packages = [
@@ -294,7 +294,7 @@ function Header() {
 
   return (
     <header className={`site-header ${isMenuOpen ? 'menu-open' : ''}`}>
-      <a href="/#home" className="brand" aria-label="Shahin">
+      <a href="#home" className="brand" aria-label="Shahin">
         <img src="/LOGO.svg" alt="Shahin" />
       </a>
       <button
@@ -359,7 +359,7 @@ function Packages() {
         </div>
         <div className="package-grid">
           {packages.map((item) => (
-            <a className={`package-card ${item.tone}`} href={`/checkout?package=${item.id}`} key={item.title}>
+            <a className={`package-card ${item.tone}`} href={`#/checkout?package=${item.id}`} key={item.title}>
               <span className="package-label">{item.label}</span>
               <h3>{item.title}</h3>
               <div className="package-price">
@@ -520,9 +520,8 @@ function Footer() {
   );
 }
 
-function CheckoutPage() {
-  const params = new URLSearchParams(window.location.search);
-  const selectedPackage = packages.find((item) => item.id === params.get('package')) || packages[0];
+function CheckoutPage({ packageId }) {
+  const selectedPackage = packages.find((item) => item.id === packageId) || packages[0];
 
   return (
     <>
@@ -608,13 +607,50 @@ function ShippingPolicyPage() {
 }
 
 function App() {
-  const path = window.location.pathname;
+  const getRoute = () => {
+    const hash = window.location.hash || '';
+    const hashValue = hash.startsWith('#') ? hash.slice(1) : hash;
+    const [hashPath, hashQuery = ''] = hashValue.split('?');
 
-  if (path === '/checkout') {
-    return <CheckoutPage />;
+    if (hashPath === '/checkout') {
+      const params = new URLSearchParams(hashQuery);
+      return { name: 'checkout', packageId: params.get('package') };
+    }
+
+    if (hashPath === '/shipping-policy') {
+      return { name: 'shipping-policy' };
+    }
+
+    if (window.location.pathname === '/checkout') {
+      const params = new URLSearchParams(window.location.search);
+      return { name: 'checkout', packageId: params.get('package') };
+    }
+
+    if (window.location.pathname === '/shipping-policy') {
+      return { name: 'shipping-policy' };
+    }
+
+    return { name: 'home' };
+  };
+
+  const [route, setRoute] = useState(() => getRoute());
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setRoute(getRoute());
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
+  if (route.name === 'checkout') {
+    return <CheckoutPage packageId={route.packageId} />;
   }
 
-  if (path === '/shipping-policy') {
+  if (route.name === 'shipping-policy') {
     return <ShippingPolicyPage />;
   }
 
