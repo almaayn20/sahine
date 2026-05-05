@@ -10,33 +10,99 @@ const contact = {
 };
 
 const policyLinks = [
-  'سياسة حماية بيانات المستخدم',
-  'سياسة استخدام الخدمات',
-  'سياسة الاستبدال والاسترجاع',
+  { label: 'سياسة حماية بيانات المستخدم', href: '/#contact' },
+  { label: 'سياسة استخدام الخدمات', href: '/#contact' },
+  { label: 'سياسة الاستبدال والاسترجاع', href: '/#contact' },
+  { label: 'سياسة الشحن والتوصيل', href: '/shipping-policy' },
 ];
 
 const navItems = [
-  { href: '#home', label: 'الرئيسية' },
-  { href: '#about', label: 'من نحن' },
-  { href: '#packages', label: 'الباقات' },
-  { href: '#services', label: 'الخدمات' },
-  { href: '#contact', label: 'التواصل' },
+  { href: '/#home', label: 'الرئيسية' },
+  { href: '/#about', label: 'من نحن' },
+  { href: '/#packages', label: 'الباقات' },
+  { href: '/#services', label: 'الخدمات' },
+  { href: '/#contact', label: 'التواصل' },
 ];
 
 const packages = [
   {
+    id: 'marketing',
     title: 'باقة النمو التسويقي',
     label: 'Marketing',
     tone: 'purple',
+    price: 2000,
     text: 'إدارة تسويق متكاملة تجمع المحتوى، التصميم، الإعلانات، الذكاء الاصطناعي، وأتمتة المتابعة لرفع جودة الحضور الرقمي.',
     features: ['هوية بصرية وتصاميم حملات', 'محتوى وسوشيال ميديا', 'إعلانات وتحسين ظهور', 'AI لتحليل الرسائل والجمهور', 'أتمتة الردود والمتابعة'],
   },
   {
+    id: 'tech',
     title: 'باقة التقنية والأتمتة',
     label: 'Tech + AI',
     tone: 'blue',
+    price: 2000,
     text: 'حلول برمجية للمتاجر والمواقع والتطبيقات مع دمج أدوات AI وأتمتة العمليات لتقليل العمل اليدوي وتسريع النمو.',
     features: ['مواقع ومتاجر وتطبيقات', 'لوحات تحكم وتكاملات', 'أتمتة عمليات البيع والعملاء', 'مساعدات AI داخل الأنظمة', 'تحليلات وتتبع أداء'],
+  },
+];
+
+const formatPrice = (price) => price.toLocaleString('en-US');
+
+const shippingPolicySections = [
+  {
+    title: 'سياسة الشحن والتوصيل للمشتري',
+    items: [
+      'عملية الشحن والتوصيل للمنتجات تعتبر جزءًا أساسيًا من عملية التسوق عبر شاهين. أغلب المنتجات رقمية ولا تحتاج لتوصيل، ويتم تسليمها حسب الاتفاق، ولا يحق للعميل استرداد أي مبلغ بعد الدفع لأننا نعمل على طلب العميل فور السداد.',
+      'أما المنتجات المحسوسة فتقع مهمة توصيل السلع ضمن مسؤولية شركات الشحن المتعاقدة بضرورة إيصال المنتج بجودة عالية وفق معايير الدقة والسلامة اللازمة.',
+      'باستخدامك لخدمات التوصيل في شاهين فأنت توافق على الشروط والتعليمات الموضحة في هذه السياسة.',
+    ],
+  },
+  {
+    title: 'تعليمات التوصيل',
+    items: [
+      'يجب كتابة العنوان المراد توصيل السلعة إليه بشكل دقيق، ولا نتحمل مسؤولية عدم استلام المنتج عند وجود خطأ في العنوان.',
+      'في حال وجود مشكلة في عملية التوصيل يرجى التواصل مع فريق الدعم الفني لدينا.',
+      'استخدامك لخدمات البريد الخاص أو الشركات المتعلقة بها يعني اتباع السياسات وشروط الاستخدام الخاصة بهم.',
+    ],
+  },
+  {
+    title: 'تكاليف الشحن والتوصيل',
+    items: [
+      'يرجى التأكد من تكاليف الشحن والتفاصيل الخاصة بالعملية قبل الموافقة والاعتماد.',
+      'تحدد تكاليف الشحن والتوصيل حسب نوع المنتج، وجهة التسليم، وشركة الشحن المستخدمة عند وجود منتجات محسوسة.',
+    ],
+  },
+  {
+    title: 'مواعيد التوصيل',
+    items: [
+      'إذا تم الطلب قبل الساعة الخامسة مساءً، يتم تسليم الطلب خلال 24 إلى 72 ساعة عمل مع الأخذ بعين الاعتبار يومي الجمعة والسبت وأي عطلة رسمية تعلنها الحكومة.',
+      'في بعض الحالات قد يستغرق التسليم أكثر من 72 ساعة حسب توافر المنتج في المستودعات، ويتم إخبار العميل في نفس يوم الطلب إذا كان التسليم سيستغرق وقتًا أطول.',
+      'إذا تم الطلب بعد انتهاء الدوام الرسمي للشركة وهو الساعة الرابعة مساءً، يبدأ حساب فترة التوصيل من ثاني يوم عمل.',
+    ],
+  },
+  {
+    title: 'قواعد وسياسات إرجاع البضائع',
+    items: [
+      'لا يحق للمستخدم إرجاع المنتجات الرقمية أو الخدمات الرقمية.',
+      'بالنسبة للمنتجات المحسوسة، تقبل حالات الإرجاع عند وصول المنتج تالفًا وغير صالح للاستخدام، أو عند استلام منتج مخالف للصور والمواصفات المدرجة من قبل المتجر.',
+    ],
+  },
+  {
+    title: 'منتجات غير مؤهلة للإرجاع',
+    items: [
+      'منتج رقمي أو خدمة رقمية.',
+      'منتج يطابق المواصفات المذكورة عنه داخل الموقع وليس به أي عيب مصنعي.',
+      'منتج تم استخدامه من قبل المشتري بشكل يؤدي إلى تغيير مواصفاته أو إتلافه بشكل جزئي أو كلي، أو منتج تمت إزالة الرقم التسلسلي عنه.',
+      'منتج تأخر العميل في عملية إرجاعه لأكثر من 3 أيام من تاريخ التسليم.',
+    ],
+  },
+  {
+    title: 'إلغاء الطلبات',
+    items: [
+      'لا يحق للمستخدم طلب إلغاء أو تعديل الطلبية بعد الدفع.',
+      'يحق للمستخدم إلغاء الطلبية في حالة عدم استلام المنتج خلال الفترة المحددة للشحن والتوصيل وفق المعلومات التي تظهر خلال عملية الشراء، وذلك عند وجود خلل منع دخول المنتج في عملية الشحن والتوصيل فعليًا، أو عدم وجود معلومات واضحة لتتبع حالة الشحن والتوصيل.',
+      'إذا كان المستخدم قد كتب العنوان بشكل خاطئ، فإنه يتحمل مسؤولية هذا الخطأ.',
+      'يحق للمستخدم إلغاء أي طلب قام بدفعه مسبقًا ولا يتم إرجاع أي جزء من المبلغ للعميل، ولا تتحمل شاهين العمولات المترتبة على ذلك، ويتم دراسة حالته خلال 45 يوم عمل.',
+    ],
   },
 ];
 
@@ -199,12 +265,36 @@ function Icon({ name }) {
   );
 }
 
+function ApplePayIcon() {
+  return (
+    <svg className="apple-pay-icon" viewBox="0 0 72 30" aria-hidden="true">
+      <path
+        className="apple-pay-apple"
+        d="M17.3 8.7c-.9 1.1-2.3 2-3.7 1.9-.2-1.5.5-3 1.4-4 1-1.2 2.6-2 3.9-2.1.2 1.5-.5 3-1.6 4.2Zm1.5 2.2c-2-.1-3.7 1.1-4.6 1.1-1 0-2.4-1-4-1-2.1 0-4.1 1.2-5.2 3.1-2.2 3.8-.6 9.4 1.6 12.5 1.1 1.5 2.3 3.2 4 3.1 1.6-.1 2.2-1 4-1s2.3 1 4 1c1.7 0 2.8-1.5 3.8-3 1.2-1.7 1.7-3.4 1.7-3.5 0-.1-3.3-1.3-3.3-5 0-3.1 2.5-4.6 2.6-4.7-1.4-2.1-3.6-2.5-4.6-2.6Z"
+      />
+      <path
+        className="apple-pay-word"
+        d="M34.3 9.2c2.7 0 4.6 1.8 4.6 4.5s-1.9 4.5-4.7 4.5h-3v5.1h-2.4V9.2h5.5Zm-3.1 7h2.5c1.8 0 2.8-.9 2.8-2.5s-1-2.5-2.8-2.5h-2.5v5Zm8.7 4.2c0-1.8 1.4-2.9 3.9-3.1l2.7-.2v-.8c0-1.1-.7-1.7-2-1.7-1.1 0-1.9.5-2.1 1.3h-2.2c.1-1.9 1.9-3.3 4.4-3.3 2.6 0 4.2 1.4 4.2 3.6v7.1h-2.2v-1.6h-.1c-.6 1.1-1.9 1.8-3.2 1.8-2 0-3.4-1.2-3.4-3.1Zm6.6-.9v-.8l-2.4.2c-1.3.1-2 .6-2 1.5s.8 1.4 1.8 1.4c1.5 0 2.6-1 2.6-2.3Zm5.2 7.6v-1.9c.2.1.6.1.9.1 1.2 0 1.8-.5 2.2-1.8l.2-.6-3.8-10.1h2.5l2.6 8.1h.1l2.6-8.1h2.4l-3.9 10.8c-.9 2.6-2.1 3.6-4.5 3.6-.4 0-1-.1-1.3-.1Z"
+      />
+    </svg>
+  );
+}
+
+function PriceTag({ price }) {
+  return (
+    <strong className="price-tag">
+      <span className="price-number">{formatPrice(price)}</span>
+      <span className="price-currency">ريال سعودي</span>
+    </strong>
+  );
+}
+
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className={`site-header ${isMenuOpen ? 'menu-open' : ''}`}>
-      <a href="#home" className="brand" aria-label="Shahin">
+      <a href="/#home" className="brand" aria-label="Shahin">
         <img src="/LOGO.svg" alt="Shahin" />
       </a>
       <button
@@ -269,17 +359,21 @@ function Packages() {
         </div>
         <div className="package-grid">
           {packages.map((item) => (
-            <article className={`package-card ${item.tone}`} key={item.title}>
-              <span>{item.label}</span>
+            <a className={`package-card ${item.tone}`} href={`/checkout?package=${item.id}`} key={item.title}>
+              <span className="package-label">{item.label}</span>
               <h3>{item.title}</h3>
+              <div className="package-price">
+                <span>سعر الباقة</span>
+                <PriceTag price={item.price} />
+              </div>
               <p>{item.text}</p>
               <ul>
                 {item.features.map((feature) => (
                   <li key={feature}>{feature}</li>
                 ))}
               </ul>
-              <a href="#contact">اطلب الباقة</a>
-            </article>
+              <span className="package-cta">الانتقال للدفع</span>
+            </a>
           ))}
         </div>
       </div>
@@ -295,7 +389,7 @@ function About() {
           <span className="eyebrow">من نحن</span>
           <h2>نوظف الذكاء الإصطناعي بالتقنية والتسويق والتجارة</h2>
           <p>
-            شاهين شركة سعودية تقدم حلولًا متكاملة في التقنية، دمج الذكاء الاصطناعي، التجارة
+            شاهين شركة بحرينية تقدم حلولًا متكاملة في التقنية، دمج الذكاء الاصطناعي، التجارة
             الإلكترونية، والتسويق الرقمي. نساعد العلامات على بناء أنظمة أذكى وحضور أقوى وتجارب
             رقمية قابلة للنمو.
           </p>
@@ -384,8 +478,8 @@ function Footer() {
         <h3>سياسات العمل</h3>
         <div className="footer-links">
           {policyLinks.map((link) => (
-            <a href="#contact" key={link}>
-              {link}
+            <a href={link.href} key={link.label}>
+              {link.label}
             </a>
           ))}
         </div>
@@ -426,7 +520,104 @@ function Footer() {
   );
 }
 
+function CheckoutPage() {
+  const params = new URLSearchParams(window.location.search);
+  const selectedPackage = packages.find((item) => item.id === params.get('package')) || packages[0];
+
+  return (
+    <>
+      <Header />
+      <main className="page-main checkout-page">
+        <section className="checkout-hero">
+          <span className="eyebrow">Checkout</span>
+          <h1>إتمام شراء {selectedPackage.title}</h1>
+          <p>راجع تفاصيل الباقة ثم اختر طريقة الدفع.</p>
+        </section>
+        <section className="checkout-grid">
+          <form className="checkout-form">
+            <h2>بيانات العميل</h2>
+            <label>
+              الاسم الكامل
+              <input type="text" name="name" placeholder="اكتب اسمك" />
+            </label>
+            <label>
+              البريد الإلكتروني
+              <input type="email" name="email" placeholder="name@example.com" />
+            </label>
+            <label>
+              رقم الجوال
+              <input type="tel" name="phone" placeholder="+966..." />
+            </label>
+            <label>
+              ملاحظات المشروع
+              <textarea name="notes" placeholder="اكتب أي تفاصيل مهمة عن مشروعك" rows="5" />
+            </label>
+            <div className="payment-methods">
+              <button className="apple-pay-button" type="button" aria-label="Apple Pay">
+                <ApplePayIcon />
+              </button>
+            </div>
+          </form>
+          <aside className={`checkout-summary ${selectedPackage.tone}`}>
+            <span>{selectedPackage.label}</span>
+            <h2>{selectedPackage.title}</h2>
+            <p>{selectedPackage.text}</p>
+            <ul>
+              {selectedPackage.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+            <div className="summary-total">
+              <span>الإجمالي</span>
+              <PriceTag price={selectedPackage.price} />
+            </div>
+          </aside>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+function ShippingPolicyPage() {
+  return (
+    <>
+      <Header />
+      <main className="page-main policy-page">
+        <section className="policy-hero">
+          <span className="eyebrow">سياسات العمل</span>
+          <h1>سياسة الشحن والتوصيل</h1>
+          <p>توضح هذه السياسة آلية تسليم المنتجات الرقمية والمحسوسة، وشروط الإرجاع والإلغاء الخاصة بخدمات شاهين.</p>
+        </section>
+        <section className="policy-content">
+          {shippingPolicySections.map((section) => (
+            <article key={section.title}>
+              <h2>{section.title}</h2>
+              <ul>
+                {section.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
 function App() {
+  const path = window.location.pathname;
+
+  if (path === '/checkout') {
+    return <CheckoutPage />;
+  }
+
+  if (path === '/shipping-policy') {
+    return <ShippingPolicyPage />;
+  }
+
   return (
     <>
       <Header />

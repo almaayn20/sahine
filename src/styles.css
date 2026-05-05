@@ -438,6 +438,7 @@ button {
 .package-card {
   --accent: var(--purple);
   position: relative;
+  display: block;
   min-height: 520px;
   padding: 38px;
   border: 1px solid rgba(255, 255, 255, 0.13);
@@ -459,10 +460,18 @@ button {
     0 32px 90px rgba(0, 0, 0, 0.42);
   overflow: hidden;
   backdrop-filter: blur(26px) saturate(145%);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease;
 }
 
 .package-card.blue {
   --accent: var(--blue);
+}
+
+.package-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 44%, white 8%);
+  transform: translateY(-8px);
 }
 
 .package-card::after {
@@ -475,7 +484,7 @@ button {
   content: "";
 }
 
-.package-card > span {
+.package-label {
   display: inline-flex;
   margin-bottom: 34px;
   padding: 8px 15px;
@@ -496,9 +505,53 @@ button {
 
 .package-card p {
   max-width: 590px;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   color: var(--muted);
   line-height: 1.9;
+}
+
+.package-price {
+  display: inline-grid;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 36%, transparent);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 18%, transparent), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 18px 46px rgba(0, 0, 0, 0.26);
+}
+
+.package-price > span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.price-tag {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: color-mix(in srgb, var(--accent) 82%, white);
+  line-height: 1;
+}
+
+.price-number {
+  direction: ltr;
+  font-family: "Inter", "Manrope", sans-serif;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.price-currency {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .package-card ul {
@@ -526,7 +579,7 @@ button {
   content: "";
 }
 
-.package-card a {
+.package-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -537,6 +590,244 @@ button {
   background: #fff;
   color: #000;
   font-weight: 900;
+}
+
+.page-main {
+  min-height: 100svh;
+  padding: 140px 20px 96px;
+  background:
+    radial-gradient(circle at 20% 16%, rgba(149, 74, 156, 0.18), transparent 30rem),
+    radial-gradient(circle at 80% 20%, rgba(30, 127, 182, 0.18), transparent 32rem),
+    #080809;
+}
+
+.checkout-hero,
+.policy-hero {
+  display: grid;
+  justify-items: center;
+  width: min(980px, 100%);
+  margin: 0 auto 54px;
+  text-align: center;
+}
+
+.checkout-hero h1,
+.policy-hero h1 {
+  margin: 0;
+  font-size: clamp(2.55rem, 6vw, 5.4rem);
+  line-height: 1.04;
+}
+
+.checkout-hero p,
+.policy-hero p {
+  max-width: 760px;
+  margin: 20px 0 0;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.78fr);
+  gap: 28px;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.checkout-form,
+.checkout-summary,
+.policy-content article {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035)),
+    rgba(18, 18, 20, 0.74);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 32px 90px rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(26px) saturate(145%);
+}
+
+.checkout-form {
+  display: grid;
+  gap: 18px;
+  padding: 34px;
+}
+
+.checkout-form h2,
+.checkout-summary h2,
+.policy-content h2 {
+  margin: 0;
+  color: #fff;
+}
+
+.checkout-form label {
+  display: grid;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 800;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  font: inherit;
+  outline: none;
+  padding: 15px 16px;
+}
+
+.checkout-form textarea {
+  resize: vertical;
+}
+
+.checkout-form input:focus,
+.checkout-form textarea:focus {
+  border-color: rgba(255, 255, 255, 0.36);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.07);
+}
+
+.payment-methods {
+  display: grid;
+  margin-top: 10px;
+}
+
+.apple-pay-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  font-family: "Inter", "Manrope", sans-serif;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 18px 46px rgba(0, 0, 0, 0.38);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.apple-pay-button:hover {
+  border-color: rgba(255, 255, 255, 0.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 24px 58px rgba(0, 0, 0, 0.44);
+  transform: translateY(-2px);
+}
+
+.apple-pay-icon {
+  width: 118px;
+  height: auto;
+  fill: currentColor;
+}
+
+.apple-pay-apple,
+.apple-pay-word {
+  fill: currentColor;
+}
+
+.checkout-summary {
+  --accent: var(--purple);
+  align-self: start;
+  padding: 34px;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.035)),
+    rgba(18, 18, 20, 0.78);
+}
+
+.checkout-summary.blue {
+  --accent: var(--blue);
+}
+
+.checkout-summary > span {
+  display: inline-flex;
+  margin-bottom: 20px;
+  padding: 8px 15px;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: color-mix(in srgb, var(--accent) 75%, white);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.checkout-summary p {
+  margin: 18px 0 0;
+  color: var(--muted);
+  line-height: 1.85;
+}
+
+.checkout-summary ul,
+.policy-content ul {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checkout-summary li,
+.policy-content li {
+  position: relative;
+  padding-inline-start: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.75;
+}
+
+.checkout-summary li::before,
+.policy-content li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.65em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent, var(--purple));
+  content: "";
+}
+
+.summary-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 30px;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 16%, transparent), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.045);
+}
+
+.summary-total > span {
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.summary-total .price-number {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+
+.policy-content {
+  display: grid;
+  gap: 20px;
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.policy-content article {
+  --accent: var(--purple);
+  padding: 30px;
 }
 
 .service-group {
@@ -783,7 +1074,8 @@ button {
 
   .about-grid,
   .cards-grid,
-  .package-grid {
+  .package-grid,
+  .checkout-grid {
     grid-template-columns: 1fr;
   }
 
@@ -804,6 +1096,14 @@ button {
 
   .footer-bottom {
     flex-direction: column;
+  }
+
+  .page-main {
+    padding-top: 120px;
+  }
+
+  .checkout-summary {
+    order: -1;
   }
 }
 
@@ -911,5 +1211,39 @@ button {
   .package-card {
     min-height: auto;
     padding: 28px;
+  }
+
+  .price-number,
+  .summary-total .price-number {
+    font-size: 2rem;
+  }
+
+  .price-tag {
+    flex-wrap: wrap;
+  }
+
+  .page-main {
+    padding: 108px 14px 72px;
+  }
+
+  .checkout-hero,
+  .policy-hero {
+    margin-bottom: 34px;
+  }
+
+  .checkout-hero h1,
+  .policy-hero h1 {
+    font-size: clamp(2.15rem, 11vw, 3.45rem);
+  }
+
+  .checkout-form,
+  .checkout-summary,
+  .policy-content article {
+    padding: 24px;
+    border-radius: 20px;
+  }
+
+  .summary-total {
+    display: grid;
   }
 }
