@@ -9,6 +9,8 @@ const {
   SMTP_USER,
   SMTP_PASS,
   MAIL_FROM,
+  MAIL_FROM_NAME,
+  MAIL_FROM_EMAIL,
   MAIL_TO_INTERNAL,
 } = process.env;
 
@@ -23,7 +25,12 @@ const transporter = isConfigured
     })
   : null;
 
-const from = MAIL_FROM || 'Shahin <info@shahin.bh>';
+// Some hosting-panel env-variable UIs strip "<...>" (they sanitize it as a
+// stray HTML tag), so build the "Name <email>" header from two plain env
+// vars instead of relying on MAIL_FROM containing angle brackets — MAIL_FROM
+// still works as a fallback if it happens to be set correctly elsewhere.
+const from =
+  MAIL_FROM || `${MAIL_FROM_NAME || 'Shahin'} <${MAIL_FROM_EMAIL || SMTP_USER || 'info@shahin.bh'}>`;
 const internalTo = MAIL_TO_INTERNAL || 'info@shahin.bh';
 
 function formatMoney(amount, currency) {
