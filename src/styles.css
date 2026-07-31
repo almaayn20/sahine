@@ -939,6 +939,62 @@ p {
   gap: var(--space-5);
 }
 
+.footer-payments {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+}
+
+.footer-payments > span {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.payment-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.payment-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+.payment-badge img {
+  max-width: 56px;
+  max-height: 22px;
+  object-fit: contain;
+  filter: none; /* override .footer img's invert(1), meant only for the white brand mark */
+}
+
+.payment-badge.square {
+  padding: 6px;
+}
+
+.payment-badge.square img {
+  max-width: 28px;
+  max-height: 28px;
+  border-radius: calc(var(--radius-sm) - 4px);
+}
+
 .footer-bottom {
   grid-column: 1 / -1;
   display: flex;
@@ -1208,7 +1264,7 @@ p {
   pointer-events: none;
   background-image: url('/pattern-dark.svg');
   background-repeat: repeat;
-  background-size: 88px 102px;
+  background-size: 168px 91px;
 }
 
 .pattern-layer.dark {

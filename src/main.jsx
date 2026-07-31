@@ -522,6 +522,29 @@ function ContactCta() {
   );
 }
 
+const paymentLogos = [
+  { name: 'Visa', src: '/payments/visa.png' },
+  { name: 'Mastercard', src: '/payments/mastercard.svg' },
+  { name: 'mada', src: '/payments/mada.webp' },
+  { name: 'GCC Net', src: '/payments/gccnet.png' },
+  { name: 'Apple Pay', src: '/payments/apple-pay.jpg' },
+  { name: 'Google Pay', src: '/payments/google-pay.png' },
+  { name: 'Samsung Pay', src: '/payments/samsung-pay.svg' },
+  { name: 'BenefitPay', src: '/payments/benefit-pay.png', square: true },
+];
+
+function PaymentBadges() {
+  return (
+    <div className="payment-badges" aria-label="طرق الدفع المتاحة">
+      {paymentLogos.map((logo) => (
+        <span className={`payment-badge ${logo.square ? 'square' : ''}`} key={logo.name}>
+          <img src={logo.src} alt={logo.name} loading="lazy" />
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function Footer() {
   return (
     <footer className="footer" id="contact">
@@ -560,6 +583,10 @@ function Footer() {
             LinkedIn
           </a>
         </div>
+      </div>
+      <div className="footer-payments">
+        <span>طرق الدفع المتاحة</span>
+        <PaymentBadges />
       </div>
       <div className="footer-bottom">
         <p>© 2026 Shahin company w.l.l جميع الحقوق محفوظة</p>

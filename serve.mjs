@@ -173,11 +173,13 @@ async function handleVerify(request, response, orderId) {
 
   try {
     const result = await verifyWithFatora(orderId);
+    console.log('[verify]', orderId, '->', result.payment_status);
     sendJson(response, result.ok ? 200 : 502, { ...result, order_id: orderId });
     if (result.payment_status === 'SUCCESS') {
       await notifyOrderPaid(orderId, result);
     }
   } catch (error) {
+    console.error('[verify] failed for', orderId, error);
     sendJson(response, 502, { error: 'تعذر التحقق من حالة الدفع.' });
   }
 }
@@ -189,15 +191,19 @@ function packageIdFromOrderId(orderId) {
 }
 
 async function notifyOrderPaid(orderId, verifyResult) {
-  if (emailedOrders.has(orderId)) return;
+  if (emailedOrders.has(orderId)) {
+    console.log('[notify] already emailed, skipping', orderId);
+    return;
+  }
   emailedOrders.add(orderId);
 
   const pkg = findPackage(packageIdFromOrderId(orderId));
   const notes = pendingOrderNotes.get(orderId) || '';
   pendingOrderNotes.delete(orderId);
 
+  console.log('[notify] sending order emails for', orderId, 'to', verifyResult.client?.email);
   try {
-    await sendOrderEmails({
+    const result = await sendOrderEmails({
       orderId,
       transactionId: verifyResult.transaction_id,
       packageTitle: pkg?.title || 'باقة شاهين',
@@ -206,9 +212,10 @@ async function notifyOrderPaid(orderId, verifyResult) {
       client: verifyResult.client || {},
       notes,
     });
+    console.log('[notify] result for', orderId, '->', JSON.stringify(result.sent), result.results);
   } catch (error) {
     emailedOrders.delete(orderId); // allow a retry on the next webhook/verify hit
-    console.error('Failed to send order emails for', orderId, error);
+    console.error('[notify] failed to send order emails for', orderId, error);
   }
 }
 
