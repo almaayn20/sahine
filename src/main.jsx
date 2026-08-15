@@ -5,6 +5,7 @@ import { CURRENCIES, packageGroups, packages, findPackage, convertAmount, format
 
 const contact = {
   phone: '+97333639622',
+  phoneSaudi: '+966544956671',
   email: 'Info@shahin.bh',
   instagram: 'https://www.instagram.com/shahinbhcom',
   linkedin: 'https://www.linkedin.com/company/shahinest/',
@@ -32,9 +33,9 @@ function CurrencySwitch() {
 }
 
 const policyLinks = [
-  { label: 'سياسة حماية بيانات المستخدم', href: '#contact' },
-  { label: 'سياسة استخدام الخدمات', href: '#contact' },
-  { label: 'سياسة الاستبدال والاسترجاع', href: '#contact' },
+  { label: 'سياسة حماية بيانات المستخدم', href: '#/privacy-policy' },
+  { label: 'سياسة استخدام الخدمات', href: '#/terms-of-service' },
+  { label: 'سياسة الاستبدال والاسترجاع', href: '#/returns-policy' },
   { label: 'سياسة الشحن والتوصيل', href: '#/shipping-policy' },
 ];
 
@@ -101,6 +102,134 @@ const shippingPolicySections = [
       'يحق للمستخدم إلغاء الطلبية في حالة عدم استلام المنتج خلال الفترة المحددة للشحن والتوصيل وفق المعلومات التي تظهر خلال عملية الشراء، وذلك عند وجود خلل منع دخول المنتج في عملية الشحن والتوصيل فعليًا، أو عدم وجود معلومات واضحة لتتبع حالة الشحن والتوصيل.',
       'إذا كان المستخدم قد كتب العنوان بشكل خاطئ، فإنه يتحمل مسؤولية هذا الخطأ.',
       'يحق للمستخدم إلغاء أي طلب قام بدفعه مسبقًا ولا يتم إرجاع أي جزء من المبلغ للعميل، ولا تتحمل شاهين العمولات المترتبة على ذلك، ويتم دراسة حالته خلال 45 يوم عمل.',
+    ],
+  },
+];
+
+const privacyPolicySections = [
+  {
+    title: 'البيانات التي نجمعها',
+    items: [
+      'الاسم الكامل، البريد الإلكتروني، ورقم الجوال عند التواصل معنا أو تعبئة نموذج الطلب.',
+      'تفاصيل المشروع أو الملاحظات التي تكتبها ضمن نموذج الطلب.',
+      'بيانات الدفع تتم معالجتها مباشرة عبر بوابة الدفع الإلكتروني (فاتورة)، ولا تحتفظ شاهين بأي بيانات بطاقة بنكية على خوادمها.',
+    ],
+  },
+  {
+    title: 'كيف نستخدم بياناتك',
+    items: [
+      'للتواصل معك بخصوص طلبك أو استفسارك.',
+      'لتنفيذ الخدمة أو الباقة التي طلبتها ومتابعة سير المشروع.',
+      'لإرسال تأكيد الطلب والفواتير والإشعارات المتعلقة بالدفع.',
+      'لا تستخدم شاهين بياناتك لأي غرض تسويقي دون إذن صريح منك.',
+    ],
+  },
+  {
+    title: 'مشاركة البيانات',
+    items: [
+      'لا تبيع شاهين أو تشارك بياناتك مع أي طرف ثالث لأغراض تسويقية.',
+      'تتم مشاركة المعلومات الضرورية فقط مع بوابة الدفع (فاتورة) لإتمام عملية الدفع.',
+      'قد تكشف شاهين عن بيانات محدودة إذا طلبتها جهة رسمية مختصة بموجب القانون.',
+    ],
+  },
+  {
+    title: 'حقوقك تجاه بياناتك',
+    items: [
+      'يحق لك طلب نسخة من البيانات المخزنة لدينا عنك.',
+      'يحق لك طلب تعديل أو حذف بياناتك بالتواصل معنا على info@shahin.bh.',
+      'يحق لك سحب موافقتك على التواصل التسويقي في أي وقت.',
+    ],
+  },
+  {
+    title: 'حماية البيانات',
+    items: [
+      'يستخدم موقع شاهين اتصالًا مشفّرًا (HTTPS) لحماية البيانات المرسلة عبر الموقع.',
+      'الوصول إلى بياناتك محدود لفريق العمل المخوّل فقط داخل شاهين.',
+    ],
+  },
+];
+
+const termsOfServiceSections = [
+  {
+    title: 'قبول الشروط',
+    items: [
+      'استخدامك لموقع شاهين أو شراء أي باقة يعني موافقتك على هذه الشروط بالكامل.',
+      'إذا كنت لا توافق على أي بند من هذه الشروط، يرجى عدم استخدام خدماتنا.',
+    ],
+  },
+  {
+    title: 'طبيعة الخدمات',
+    items: [
+      'تقدم شاهين خدمات تسويق رقمي وحلول تقنية حسب الباقات الموضحة في الموقع.',
+      'تفاصيل ونطاق كل باقة موضحة في صفحتها، وأي طلبات خارج النطاق المتفق عليه تحتاج اتفاقًا منفصلًا.',
+      'مدة تنفيذ الخدمة تعتمد على نوع الباقة وسرعة تزويدنا بالمعلومات والمواد المطلوبة من العميل.',
+    ],
+  },
+  {
+    title: 'مسؤوليات العميل',
+    items: [
+      'تزويد شاهين بالمعلومات والمواد المطلوبة لتنفيذ المشروع في الوقت المناسب.',
+      'أي تأخير في تزويدنا بالمعلومات قد يؤثر على الجدول الزمني للتسليم.',
+      'التأكد من صحة بيانات التواصل والدفع عند إتمام الطلب.',
+    ],
+  },
+  {
+    title: 'الدفع والأسعار',
+    items: [
+      'الأسعار موضحة في الموقع بالريال السعودي أو الدينار البحريني حسب اختيارك.',
+      'يتم الدفع بالكامل مقدمًا عبر بوابة الدفع الإلكتروني، إلا إذا تم الاتفاق على غير ذلك كتابيًا.',
+      'الأسعار قابلة للتغيير دون إشعار مسبق، والسعر المعتمد هو السعر وقت إتمام الطلب.',
+    ],
+  },
+  {
+    title: 'الملكية الفكرية',
+    items: [
+      'تصبح التصاميم والمحتوى والأنظمة المطوّرة ملكًا للعميل بعد إتمام السداد الكامل للباقة.',
+      'تحتفظ شاهين بحق عرض العمل ضمن أعمالها السابقة، إلا إذا طلب العميل خلاف ذلك كتابيًا.',
+    ],
+  },
+  {
+    title: 'حدود المسؤولية',
+    items: [
+      'تبذل شاهين أقصى جهدها لتقديم خدمة عالية الجودة، لكنها لا تضمن نتائج تسويقية محددة (كعدد مبيعات أو زيارات) لاعتمادها على عوامل خارجة عن إرادتنا.',
+      'شاهين غير مسؤولة عن أي أضرار غير مباشرة تنتج عن استخدام الخدمة.',
+    ],
+  },
+];
+
+const returnsPolicySections = [
+  {
+    title: 'طبيعة الخدمات المقدمة',
+    items: [
+      'باقات شاهين هي خدمات تسويقية وتقنية تُنفذ حسب طلب العميل، وليست منتجات جاهزة قابلة للإرجاع بالمفهوم التقليدي.',
+    ],
+  },
+  {
+    title: 'إلغاء الطلب قبل بدء العمل',
+    items: [
+      'يحق للعميل طلب إلغاء الباقة واسترداد كامل المبلغ خلال 24 ساعة من الدفع، بشرط عدم البدء الفعلي بالعمل.',
+      'بعد بدء العمل الفعلي على المشروع، لا يحق استرجاع أي مبلغ مدفوع.',
+    ],
+  },
+  {
+    title: 'الاستبدال بين الباقات',
+    items: [
+      'يمكن للعميل طلب الترقية إلى باقة أعلى بدفع الفرق، خلال فترة تنفيذ المشروع.',
+      'التحويل إلى باقة أقل غير متاح بعد بدء التنفيذ.',
+    ],
+  },
+  {
+    title: 'حالات الاسترجاع الجزئي',
+    items: [
+      'إذا تعذر على شاهين تنفيذ جزء من الباقة المتفق عليها، يتم الاتفاق مع العميل على استرجاع جزئي يعادل الجزء غير المنفذ.',
+      'يتم حل أي نزاع بالتواصل المباشر خلال 7 أيام عمل من تاريخ إثارته.',
+    ],
+  },
+  {
+    title: 'طريقة تقديم طلب الاسترجاع',
+    items: [
+      'تواصل معنا عبر info@shahin.bh أو واتساب مع ذكر رقم الطلب وسبب الطلب.',
+      'تتم مراجعة طلبات الاسترجاع والرد عليها خلال 3 إلى 5 أيام عمل.',
     ],
   },
 ];
@@ -517,7 +646,7 @@ function ContactCta() {
     <section className="cta-section">
       <span className="pattern-layer dark" aria-hidden="true" />
       <h2>هل أنت مستعد لإحداث فرق رقمي؟</h2>
-      <a href={`https://wa.me/${contact.phone.replace('+', '')}`}>ابدأ مشروعك اليوم</a>
+      <a href="#/contact">ابدأ مشروعك اليوم</a>
     </section>
   );
 }
@@ -842,18 +971,18 @@ function PaymentResultPage({ status: routeStatus, orderId }) {
   );
 }
 
-function ShippingPolicyPage() {
+function PolicyPage({ title, intro, sections }) {
   return (
     <>
       <Header />
       <main className="page-main policy-page">
         <section className="policy-hero">
           <span className="eyebrow">سياسات العمل</span>
-          <h1>سياسة الشحن والتوصيل</h1>
-          <p>توضح هذه السياسة آلية تسليم المنتجات الرقمية والمحسوسة، وشروط الإرجاع والإلغاء الخاصة بخدمات شاهين.</p>
+          <h1>{title}</h1>
+          <p>{intro}</p>
         </section>
         <section className="policy-content">
-          {shippingPolicySections.map((section) => (
+          {sections.map((section) => (
             <article key={section.title}>
               <h2>{section.title}</h2>
               <ul>
@@ -864,6 +993,74 @@ function ShippingPolicyPage() {
             </article>
           ))}
         </section>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+function ShippingPolicyPage() {
+  return (
+    <PolicyPage
+      title="سياسة الشحن والتوصيل"
+      intro="توضح هذه السياسة آلية تسليم المنتجات الرقمية والمحسوسة، وشروط الإرجاع والإلغاء الخاصة بخدمات شاهين."
+      sections={shippingPolicySections}
+    />
+  );
+}
+
+function PrivacyPolicyPage() {
+  return (
+    <PolicyPage
+      title="سياسة حماية بيانات المستخدم"
+      intro="توضح هذه السياسة نوع البيانات التي تجمعها شاهين، وكيفية استخدامها وحمايتها، وحقوقك تجاهها."
+      sections={privacyPolicySections}
+    />
+  );
+}
+
+function TermsOfServicePage() {
+  return (
+    <PolicyPage
+      title="سياسة استخدام الخدمات"
+      intro="توضح هذه السياسة الشروط والأحكام الخاصة باستخدام خدمات وباقات شاهين."
+      sections={termsOfServiceSections}
+    />
+  );
+}
+
+function ReturnsPolicyPage() {
+  return (
+    <PolicyPage
+      title="سياسة الاستبدال والاسترجاع"
+      intro="توضح هذه السياسة أحكام إلغاء واسترجاع باقات شاهين التسويقية والتقنية."
+      sections={returnsPolicySections}
+    />
+  );
+}
+
+function ContactPage() {
+  return (
+    <>
+      <Header />
+      <main className="page-main contact-page">
+        <section className="checkout-hero">
+          <span className="eyebrow">تواصل معنا</span>
+          <h1>وين تحب نتواصل معك؟</h1>
+          <p>اختر رقم الواتساب الأقرب لك وابدأ المحادثة مباشرة مع فريق شاهين.</p>
+        </section>
+        <div className="contact-choice">
+          <a className="contact-choice-card" href={`https://wa.me/${contact.phone.replace('+', '')}`}>
+            <Icon name="phone" />
+            <h3>واتساب البحرين</h3>
+            <span dir="ltr">{contact.phone}</span>
+          </a>
+          <a className="contact-choice-card" href={`https://wa.me/${contact.phoneSaudi.replace('+', '')}`}>
+            <Icon name="phone" />
+            <h3>واتساب السعودية</h3>
+            <span dir="ltr">{contact.phoneSaudi}</span>
+          </a>
+        </div>
       </main>
       <Footer />
     </>
@@ -883,6 +1080,22 @@ function App() {
 
     if (hashPath === '/shipping-policy') {
       return { name: 'shipping-policy' };
+    }
+
+    if (hashPath === '/privacy-policy') {
+      return { name: 'privacy-policy' };
+    }
+
+    if (hashPath === '/terms-of-service') {
+      return { name: 'terms-of-service' };
+    }
+
+    if (hashPath === '/returns-policy') {
+      return { name: 'returns-policy' };
+    }
+
+    if (hashPath === '/contact') {
+      return { name: 'contact' };
     }
 
     if (hashPath === '/payment-success' || hashPath === '/payment-failure') {
@@ -962,6 +1175,14 @@ function App() {
     page = <CheckoutPage packageId={route.packageId} />;
   } else if (route.name === 'shipping-policy') {
     page = <ShippingPolicyPage />;
+  } else if (route.name === 'privacy-policy') {
+    page = <PrivacyPolicyPage />;
+  } else if (route.name === 'terms-of-service') {
+    page = <TermsOfServicePage />;
+  } else if (route.name === 'returns-policy') {
+    page = <ReturnsPolicyPage />;
+  } else if (route.name === 'contact') {
+    page = <ContactPage />;
   } else if (route.name === 'payment-result') {
     page = <PaymentResultPage status={route.status} orderId={route.orderId} />;
   }

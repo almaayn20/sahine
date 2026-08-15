@@ -1375,6 +1375,62 @@ p {
 }
 
 /* ---------------------------------------------------------------------- */
+/* Contact choice page                                                     */
+/* ---------------------------------------------------------------------- */
+
+.contact-choice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  width: min(760px, 100%);
+  margin: 0 auto;
+}
+
+.contact-choice-card {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow: var(--glow-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  text-align: center;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.contact-choice-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-primary) 55%, white 10%);
+  box-shadow: var(--glow-soft), 0 0 46px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+}
+
+.contact-choice-card .icon {
+  width: 30px;
+  height: 30px;
+  color: var(--accent-primary);
+}
+
+.contact-choice-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.contact-choice-card span {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .contact-choice {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
 /* Anchor scroll offset — keeps sections clear of the floating header      */
 /* ---------------------------------------------------------------------- */
 
