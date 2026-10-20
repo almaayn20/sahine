@@ -82,14 +82,16 @@ async function handleCheckout(request, response) {
     return;
   }
 
-  const { packageId, currency, client, notes } = body;
+  const { packageId, client, notes } = body;
   const pkg = findPackage(packageId);
   if (!pkg) {
     sendJson(response, 400, { error: 'الباقة المطلوبة غير موجودة.' });
     return;
   }
 
-  const currencyCode = currency === 'BHD' ? 'BHD' : 'SAR';
+  // Fatora only accepts BHD on this merchant account; prices are listed in SAR
+  // on the site and converted here (never trust a client-sent currency/amount).
+  const currencyCode = 'BHD';
   const amount = convertAmount(pkg.price, currencyCode);
 
   if (!client || (!client.email && !client.phone)) {

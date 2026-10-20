@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
-import { CURRENCIES, packageGroups, packages, findPackage, convertAmount, formatAmount } from './data.mjs';
+import { packageGroups, packages, findPackage, formatAmount } from './data.mjs';
 
 const contact = {
   phone: '+97333639622',
@@ -10,27 +10,6 @@ const contact = {
   instagram: 'https://www.instagram.com/shahinbhcom',
   linkedin: 'https://www.linkedin.com/company/shahinest/',
 };
-
-const CurrencyContext = createContext({ currency: 'SAR', setCurrency: () => {} });
-const useCurrency = () => useContext(CurrencyContext);
-
-function CurrencySwitch() {
-  const { currency, setCurrency } = useCurrency();
-  return (
-    <div className="currency-switch" role="group" aria-label="اختيار العملة">
-      {Object.values(CURRENCIES).map((item) => (
-        <button
-          key={item.code}
-          type="button"
-          className={currency === item.code ? 'active' : ''}
-          onClick={() => setCurrency(item.code)}
-        >
-          {item.symbol}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 const policyLinks = [
   { label: 'سياسة حماية بيانات المستخدم', href: '#/privacy-policy' },
@@ -176,7 +155,7 @@ const termsOfServiceSections = [
   {
     title: 'الدفع والأسعار',
     items: [
-      'الأسعار موضحة في الموقع بالريال السعودي أو الدينار البحريني حسب اختيارك.',
+      'الأسعار موضحة في الموقع بالريال السعودي، ويتم الدفع بالدينار البحريني بحسب سعر الصرف الثابت المعتمد في الموقع.',
       'يتم الدفع بالكامل مقدمًا عبر بوابة الدفع الإلكتروني، إلا إذا تم الاتفاق على غير ذلك كتابيًا.',
       'الأسعار قابلة للتغيير دون إشعار مسبق، والسعر المعتمد هو السعر وقت إتمام الطلب.',
     ],
@@ -430,12 +409,12 @@ function ApplePayIcon() {
   );
 }
 
+// Prices are listed in SAR; payment itself is always charged in BHD.
 function PriceTag({ price }) {
-  const { currency } = useCurrency();
   return (
     <strong className="price-tag">
-      <span className="price-number">{formatAmount(price, currency)}</span>
-      <span className="price-currency">{CURRENCIES[currency].label}</span>
+      <span className="price-number">{formatAmount(price, 'SAR')}</span>
+      <span className="price-currency">ريال سعودي</span>
     </strong>
   );
 }
@@ -511,7 +490,6 @@ function Packages() {
         <div className="center-heading">
           <h2>باقات الخدمات</h2>
           <p>بالتعاون مع بنك التنمية وبرنامج تجسير — باقات واضحة تسويقية وتقنية تختارها حسب مرحلة مشروعك.</p>
-          <CurrencySwitch />
         </div>
 
         {packageGroups.map((group) => (
@@ -674,6 +652,26 @@ function PaymentBadges() {
   );
 }
 
+const EFADA_SCRIPT_SRC =
+  'https://service.moic.gov.bh/newefadaapi/api/Seal/image?s=https://www.shahin.bh&sz=1';
+
+// The Ministry's script fills #efadaDiv — but if that div is missing when it
+// runs it falls back to document.write(), which would wipe a React page. So we
+// load it ourselves, only after the div is mounted.
+function EfadaSeal() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = EFADA_SCRIPT_SRC;
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      script.remove();
+    };
+  }, []);
+
+  return <div id="efadaDiv" className="efada-seal" />;
+}
+
 function Footer() {
   return (
     <footer className="footer" id="contact">
@@ -681,6 +679,7 @@ function Footer() {
       <div className="footer-brand">
         <img src="/LOGO.svg" alt="Shahin" />
         <p>Shahin company w.l.l</p>
+        <EfadaSeal />
       </div>
       <div className="footer-column">
         <h3>سياسات العمل</h3>
@@ -697,7 +696,13 @@ function Footer() {
         <div className="footer-links">
           <a href={`tel:${contact.phone}`}>
             <Icon name="phone" />
-            {contact.phone}
+            <span dir="ltr">{contact.phone}</span>
+            <small>البحرين</small>
+          </a>
+          <a href={`tel:${contact.phoneSaudi}`}>
+            <Icon name="phone" />
+            <span dir="ltr">{contact.phoneSaudi}</span>
+            <small>السعودية</small>
           </a>
           <a href={`mailto:${contact.email}`}>
             <Icon name="mail" />
@@ -719,14 +724,6 @@ function Footer() {
       </div>
       <div className="footer-bottom">
         <p>© 2026 Shahin company w.l.l جميع الحقوق محفوظة</p>
-        <div className="socials">
-          <a href={contact.instagram} target="_blank" rel="noreferrer">
-            IG
-          </a>
-          <a href={contact.linkedin} target="_blank" rel="noreferrer">
-            IN
-          </a>
-        </div>
       </div>
     </footer>
   );
@@ -738,12 +735,11 @@ const PHONE_COUNTRIES = [
 ];
 
 function CheckoutPage({ packageId }) {
-  const { currency } = useCurrency();
   const selectedPackage = findPackage(packageId) || packages[0];
   const [form, setForm] = useState({
     name: '',
     email: '',
-    phoneCode: currency === 'SAR' ? '+966' : '+973',
+    phoneCode: '+973',
     phoneLocal: '',
     notes: '',
   });
@@ -782,7 +778,7 @@ function CheckoutPage({ packageId }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           packageId: selectedPackage.id,
-          currency,
+          currency: 'BHD',
           method,
           client: { name: form.name, email: form.email, phone },
           notes: form.notes,
@@ -817,7 +813,6 @@ function CheckoutPage({ packageId }) {
           <span className="eyebrow">Checkout</span>
           <h1>إتمام شراء {selectedPackage.title}</h1>
           <p>راجع تفاصيل الباقة، عبّي بياناتك، واختر طريقة الدفع المناسبة لك.</p>
-          <CurrencySwitch />
         </section>
         <section className="checkout-grid">
           <form className="checkout-form" onSubmit={(event) => event.preventDefault()}>
@@ -903,6 +898,10 @@ function CheckoutPage({ packageId }) {
               <span>الإجمالي</span>
               <PriceTag price={selectedPackage.price} />
             </div>
+            <p className="bhd-note">
+              الأسعار معروضة بالريال السعودي، ويتم الدفع بالدينار البحريني: ≈{' '}
+              <strong dir="ltr">{formatAmount(selectedPackage.price, 'BHD')} BHD</strong>
+            </p>
           </aside>
         </section>
       </main>
@@ -1141,22 +1140,6 @@ function App() {
     window.scrollTo(0, 0);
   }, [route.name, route.packageId]);
 
-  const [currency, setCurrency] = useState(() => {
-    try {
-      return localStorage.getItem('shahin_currency') || 'SAR';
-    } catch {
-      return 'SAR';
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('shahin_currency', currency);
-    } catch {
-      /* localStorage unavailable — ignore */
-    }
-  }, [currency]);
-
   let page = (
     <>
       <Header />
@@ -1187,7 +1170,7 @@ function App() {
     page = <PaymentResultPage status={route.status} orderId={route.orderId} />;
   }
 
-  return <CurrencyContext.Provider value={{ currency, setCurrency }}>{page}</CurrencyContext.Provider>;
+  return page;
 }
 
 createRoot(document.getElementById('root')).render(<App />);

@@ -933,12 +933,6 @@ p {
   color: var(--accent-primary);
 }
 
-.socials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5);
-}
-
 .footer-payments {
   grid-column: 1 / -1;
   display: flex;
@@ -993,6 +987,35 @@ p {
   max-width: 28px;
   max-height: 28px;
   border-radius: calc(var(--radius-sm) - 4px);
+}
+
+.footer-links small {
+  color: var(--text-faint);
+  font-size: 0.74rem;
+}
+
+.efada-seal:empty {
+  display: none;
+}
+
+.efada-seal {
+  justify-self: start;
+  width: fit-content;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+.efada-seal a {
+  display: block;
+  line-height: 0;
+}
+
+.efada-seal img {
+  display: block;
+  width: 100px;
+  height: auto;
+  filter: none;
 }
 
 .footer-bottom {
@@ -1215,34 +1238,6 @@ p {
   fill: currentColor;
 }
 
-.currency-switch {
-  display: inline-flex;
-  gap: 4px;
-  margin-top: var(--space-5);
-  padding: 4px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-}
-
-.currency-switch button {
-  min-width: 58px;
-  padding: 7px 14px;
-  border: none;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--text-dim);
-  font-weight: 700;
-  font-size: 0.84rem;
-  cursor: pointer;
-  transition: background 160ms ease, color 160ms ease;
-}
-
-.currency-switch button.active {
-  background: var(--gradient-accent);
-  color: #fff;
-}
-
 .payment-result .eyebrow.success {
   color: var(--accent-primary);
 }
@@ -1361,6 +1356,17 @@ p {
 
 .summary-total .price-number {
   font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+}
+
+.bhd-note {
+  margin: var(--space-3) 0 0;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.bhd-note strong {
+  color: var(--text);
 }
 
 .policy-content {
