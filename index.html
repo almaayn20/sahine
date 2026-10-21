@@ -26,7 +26,8 @@
       })(window, document, 'https://sc-static.net/scevent.min.js');
 
       snaptr('init', '363a9fd8-7c50-49fc-87fd-741a6f75fe5c');
-      snaptr('track', 'PAGE_VIEW');
+      // PAGE_VIEW is fired from the app (src/track.js) so every route is counted
+      // and the pixel + server events share one dedup id.
     </script>
     <!-- End Snap Pixel Code -->
 

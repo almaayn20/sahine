@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
+import { track } from './track.js';
 import { packageGroups, packages, findPackage, formatAmount } from './data.mjs';
 
 const contact = {
@@ -745,6 +746,13 @@ function CheckoutPage({ packageId }) {
   });
   const [status, setStatus] = useState({ loading: null, error: '' });
 
+  useEffect(() => {
+    track('VIEW_CONTENT', {
+      pixel: { item_ids: [selectedPackage.id], price: selectedPackage.price, currency: 'SAR' },
+      custom: { content_ids: [selectedPackage.id], value: selectedPackage.price, currency: 'SAR' },
+    });
+  }, [selectedPackage.id]);
+
   const updateField = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
@@ -772,6 +780,12 @@ function CheckoutPage({ packageId }) {
     }
 
     setStatus({ loading: method, error: '' });
+    track('START_CHECKOUT', {
+      email: form.email || undefined,
+      phone: phone || undefined,
+      pixel: { price: selectedPackage.price, currency: 'SAR', item_ids: [selectedPackage.id] },
+      custom: { value: selectedPackage.price, currency: 'SAR', content_ids: [selectedPackage.id] },
+    });
     try {
       const response = await fetch('/api/checkout', {
         method: 'POST',
@@ -924,6 +938,17 @@ function PaymentResultPage({ status: routeStatus, orderId }) {
       .then((data) => {
         if (cancelled) return;
         if (data.payment_status === 'SUCCESS') {
+          track('PURCHASE', {
+            eventId: orderId,
+            email: data.client?.email,
+            phone: data.client?.phone,
+            pixel: {
+              price: Number(data.amount),
+              currency: data.currency,
+              transaction_id: orderId,
+              item_ids: [String(orderId).split('-')[1]?.toLowerCase()],
+            },
+          });
           setResult({ state: 'success', data });
         } else if (data.payment_status === 'PENDING') {
           setResult({ state: 'pending', data });
@@ -1138,6 +1163,10 @@ function App() {
       return;
     }
     window.scrollTo(0, 0);
+  }, [route.name, route.packageId]);
+
+  useEffect(() => {
+    track('PAGE_VIEW');
   }, [route.name, route.packageId]);
 
   let page = (

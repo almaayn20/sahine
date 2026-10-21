@@ -1,0 +1,34 @@
+# Builds the site on GitHub (the shared host's old glibc can't run Vite/Rollup)
+# and publishes source + built dist/ to the `deploy` branch, which the host
+# pulls automatically (see deploy/pull.sh).
+name: Build and publish deploy branch
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Publish to deploy branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f dist
+          git commit -m "Build ${GITHUB_SHA::7}"
+          git push --force origin HEAD:deploy

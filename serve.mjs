@@ -3,6 +3,7 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
 import { findPackage, convertAmount } from './src/data.mjs';
 import { sendOrderEmails } from './mailer.mjs';
+import { buildEvent, sendSnapEvents, snapEnabled } from './snap.mjs';
 
 const root = resolve('dist');
 const port = Number(process.env.PORT || 4173);
@@ -15,6 +16,7 @@ const FATORA_API_KEY = process.env.FATORA_API_KEY || '';
 // minutes and none of this needs to survive a process restart.
 const pendingOrderNotes = new Map();
 const emailedOrders = new Set();
+const snapPurchases = new Set();
 
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -178,7 +180,7 @@ async function handleVerify(request, response, orderId) {
     console.log('[verify]', orderId, '->', result.payment_status);
     sendJson(response, result.ok ? 200 : 502, { ...result, order_id: orderId });
     if (result.payment_status === 'SUCCESS') {
-      await notifyOrderPaid(orderId, result);
+      await notifyOrderPaid(orderId, result, request);
     }
   } catch (error) {
     console.error('[verify] failed for', orderId, error);
@@ -192,7 +194,72 @@ function packageIdFromOrderId(orderId) {
   return parts.length >= 2 ? parts[1].toLowerCase() : null;
 }
 
-async function notifyOrderPaid(orderId, verifyResult) {
+
+function clientIp(request) {
+  const forwarded = String(request.headers['x-forwarded-for'] || '').split(',')[0].trim();
+  return forwarded || request.socket.remoteAddress || '';
+}
+
+// Only these names may be relayed to Snap from the browser; PURCHASE is
+// server-originated only (after Fatora confirms the payment).
+const TRACKABLE_EVENTS = new Set(['PAGE_VIEW', 'VIEW_CONTENT', 'START_CHECKOUT']);
+
+async function handleTrack(request, response) {
+  response.writeHead(204);
+  response.end();
+  if (!snapEnabled) return;
+
+  try {
+    const body = await readJsonBody(request);
+    if (!TRACKABLE_EVENTS.has(body.name)) return;
+    const event = buildEvent({
+      name: body.name,
+      eventId: String(body.eventId || '').slice(0, 100) || undefined,
+      url: String(body.url || '').slice(0, 500),
+      ip: clientIp(request),
+      userAgent: request.headers['user-agent'],
+      email: body.email,
+      phone: body.phone,
+      scClickId: body.scClickId ? String(body.scClickId).slice(0, 200) : undefined,
+      scCookie: body.scCookie ? String(body.scCookie).slice(0, 200) : undefined,
+      custom: body.custom && typeof body.custom === 'object' ? body.custom : undefined,
+    });
+    await sendSnapEvents([event]);
+  } catch (error) {
+    console.error('[track] failed', error);
+  }
+}
+
+async function sendSnapPurchase(orderId, verifyResult, request) {
+  if (!snapEnabled || snapPurchases.has(orderId)) return;
+  snapPurchases.add(orderId);
+  try {
+    const event = buildEvent({
+      name: 'PURCHASE',
+      eventId: orderId, // same id the browser pixel uses -> Snap de-duplicates
+      url: `${process.env.PUBLIC_SITE_URL || ''}/#/payment-success`,
+      ip: request ? clientIp(request) : undefined,
+      userAgent: request?.headers['user-agent'],
+      email: verifyResult.client?.email,
+      phone: verifyResult.client?.phone,
+      custom: {
+        currency: verifyResult.currency,
+        value: Number(verifyResult.amount),
+        order_id: orderId,
+        content_ids: [packageIdFromOrderId(orderId)],
+        content_type: 'product',
+      },
+    });
+    const result = await sendSnapEvents([event]);
+    console.log('[snap] PURCHASE', orderId, '->', result.status);
+  } catch (error) {
+    snapPurchases.delete(orderId);
+    console.error('[snap] PURCHASE failed for', orderId, error);
+  }
+}
+
+async function notifyOrderPaid(orderId, verifyResult, request) {
+  sendSnapPurchase(orderId, verifyResult, request);
   if (emailedOrders.has(orderId)) {
     console.log('[notify] already emailed, skipping', orderId);
     return;
@@ -268,6 +335,11 @@ createServer((request, response) => {
 
   if (url.pathname === '/api/checkout' && request.method === 'POST') {
     handleCheckout(request, response);
+    return;
+  }
+
+  if (url.pathname === '/api/track' && request.method === 'POST') {
+    handleTrack(request, response);
     return;
   }
 
