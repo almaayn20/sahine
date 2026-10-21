@@ -9,6 +9,9 @@
 # Override paths with APP_DIR / VENV_ACTIVATE if the layout differs.
 set -u
 
+# Everything lives in main() and the file ends with `main; exit`, so bash has
+# parsed the whole script before git can replace this file mid-run.
+main() {
 APP_DIR="${APP_DIR:-$HOME/shahin1}"
 VENV_ACTIVATE="${VENV_ACTIVATE:-$HOME/nodevenv/shahin1/20/bin/activate}"
 BRANCH="${BRANCH:-deploy}"
@@ -40,7 +43,17 @@ fi
 RESTART=no
 if [ "$OLD" = none ] || echo "$CHANGED" | grep -qE '^(serve|mailer|snap)\.mjs$|^src/data\.mjs$|^package(-lock)?\.json$'; then
   touch tmp/restart.txt
+  # On this host (CloudLinux/LiteSpeed "lsnode") restart.txt alone is NOT
+  # honoured, so stop the running app; it is started again, with the new
+  # code, by the next request — which we make right away.
+  pkill -u "$(id -un)" -f "lsnode:$APP_DIR/" 2>>"$LOG"
+  sleep 2
+  curl -s -m 60 -o /dev/null "${WARM_URL:-https://shahin.bh/}" 2>>"$LOG"
   RESTART=yes
 fi
 
 echo "$(date -u +%FT%TZ) deployed ${NEW:0:7} (was ${OLD:0:7}) restart=$RESTART" >>"$LOG"
+}
+
+main "$@"
+exit $?
